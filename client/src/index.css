@@ -1,0 +1,40 @@
+:root {
+  --bg: #344055;
+  --font: #ECEEED;
+
+
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+html, body, .App {
+  min-height: 100vh;
+  height: 100%;
+  border: 0px;
+  margin: 0px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--bg);
+  font: var(--font);
+}
+
+h1 {
+  font-family: "Roboto";
+  font-size: 36pt;
+  color: var(--font);
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
