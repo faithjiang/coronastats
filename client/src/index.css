@@ -1,8 +1,6 @@
 :root {
   --bg: #344055;
   --font: #ECEEED;
-
-
 }
 
 body {
@@ -19,9 +17,10 @@ code {
     monospace;
 }
 
-html, body, .App {
+html, body, .App, #root {
   min-height: 100vh;
   height: 100%;
+  width: 100%;
   border: 0px;
   margin: 0px;
   display: flex;
