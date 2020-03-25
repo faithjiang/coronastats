@@ -5,7 +5,7 @@ const {countries} = require('../../countries');
 class SelectBox extends Component {
     constructor(props) {
         super(props);
-        this.state = Object.assign(countries, {input: ''});
+        this.state = Object.assign(countries, {min: 0, input: ''});
     }
 
     componentDidMount = () => {
@@ -20,7 +20,7 @@ class SelectBox extends Component {
     createSelectTable = () => {
         let selectList = [];
         for (let country in this.state) {
-            if (country === 'input') { continue }
+            if (country === 'input' || country === 'min') { continue }
             if (this.state.input !== '' && !(country.startsWith(this.state.input))) { continue }
             if ('provinces' in this.state[country]) {
                 selectList.push(this.createAccordion(country))
@@ -72,24 +72,28 @@ class SelectBox extends Component {
     }
 
     handleChange = e => {
-        let country = e.target.getAttribute('country');
-        let province = e.target.getAttribute('province');
-        let tmpCountry = this.state[country];
-        if (e.target.checked) {
-          if (province) {
-            tmpCountry = this.add2Provinces(tmpCountry, province);
-          } else {
-            tmpCountry = this.checkCountry(tmpCountry, true);
-          }
+        let query = this.state;
+        if (e.target.id === 'min_count') {
+            query.min = e.target.value;
         } else {
-          if (province) {
-            tmpCountry = this.removeFrmProvinces(tmpCountry, province);
-          } else {
-            tmpCountry = this.checkCountry(tmpCountry, false);
-          }
+            let country = e.target.getAttribute('country');
+            let province = e.target.getAttribute('province');
+            if (e.target.checked) {
+              if (province) {
+                query[country] = this.add2Provinces(query[country], province);
+              } else {
+                query[country] = this.checkCountry(query[country], true);
+              }
+            } else {
+              if (province) {
+                query[country] = this.removeFrmProvinces(query[country], province);
+              } else {
+                query[country] = this.checkCountry(query[country], false);
+              }
+            }
         }
-        let query = this.getQuery(Object.assign(this.state, {[country]: tmpCountry}));
-        this.props.getChart(query);
+
+        this.props.getChart(this.getQuery(query));
     }
 
 
@@ -137,7 +141,7 @@ class SelectBox extends Component {
         let query = {country: [], province: []};
         let out = [];
         for (let country in currentSelectList) {
-            if (country === 'input') { continue }
+            if (country === 'input' || country === 'min') { continue }
             if (currentSelectList[country].checked === true) {
                 query.country.push(country);
             } else {
@@ -149,6 +153,7 @@ class SelectBox extends Component {
                 }
             }
         }
+        out.push('min=' + currentSelectList.min);
         if (query.country.length > 0) {
             out.push('country=' + query.country.join('--'));
         }
@@ -175,12 +180,23 @@ class SelectBox extends Component {
         this.setState({[country]: tmpCountry});
     }   
 
+    getRangeSelect = () => {
+        return (
+            <Form.Group className="minRangeSelector">
+                <Form.Label>SELECT MIN CASES:</Form.Label>
+                <Form.Control  type="range" id="min_count" min='0' max='2000' value={this.state.min} onChange={e => {this.handleChange(e)}} />
+            </Form.Group>
+        )
+    }
+
     render() {
         let selectList = this.createSelectTable();
+        let rangeSelect = this.getRangeSelect();
         return(
             <div className='SelectBox'>
+                {rangeSelect}
                 <input type='text' onChange={e => {this.updateList(e)}} className="searchInput" />
-                {selectList}
+                <div className="CountriesList">{selectList}</div>
             </div>
         )
     }

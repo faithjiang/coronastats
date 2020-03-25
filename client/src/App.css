@@ -22,12 +22,10 @@
   width: 17%;
   min-width: 40px;
   min-height: 280px;
-  max-height: 700px;
+  height: 700px;
   
   padding: 10px;
   margin-left: 2%;
-
-  overflow-y: scroll;
 
   color: #CCD7DD;
   font-family: 'Roboto';
@@ -82,4 +80,18 @@
 
 input[type="checkbox"] {
   transform: scale(1.2);
+}
+
+.minRangeSelector {
+  width: calc(100% - 2px);
+  display: flex;
+  flex-direction: column;
+  padding-top: 10px;
+  padding-bottom: 20px;
+}
+
+.CountriesList {
+  min-height: 280px;
+  height: calc(100% - 120px);
+  overflow-y: scroll;
 }
