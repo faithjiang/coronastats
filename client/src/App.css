@@ -56,3 +56,30 @@
 .SelectBox button:hover {
   cursor: pointer;
 }
+
+.searchInput {
+  width: calc(100% - 2px);
+  height: 32px;
+
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 0px transparent;
+
+  font-size: 1.2em;
+}
+
+.form-check {
+  padding: 5px 0px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-family: 'Roboto';
+}
+
+.form-check label {
+  padding-left: 5px;
+}
+
+input[type="checkbox"] {
+  transform: scale(1.2);
+}

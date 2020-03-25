@@ -5,7 +5,7 @@ const {countries} = require('../../countries');
 class SelectBox extends Component {
     constructor(props) {
         super(props);
-        this.state = countries;
+        this.state = Object.assign(countries, {input: ''});
     }
 
     componentDidMount = () => {
@@ -13,15 +13,21 @@ class SelectBox extends Component {
         this.props.getChart(query);
     }
 
+    updateList = e =>{
+        this.setState({input: e.target.value});
+    }
+
     createSelectTable = () => {
         let selectList = [];
         for (let country in this.state) {
-          if ('provinces' in this.state[country]) {
-            selectList.push(this.createAccordion(country))
-          } else {
-            let checkBox = this.createCheckBox(country);
-            selectList.push(checkBox);
-          }
+            if (country === 'input') { continue }
+            if (this.state.input !== '' && !(country.startsWith(this.state.input))) { continue }
+            if ('provinces' in this.state[country]) {
+                selectList.push(this.createAccordion(country))
+            } else {
+                let checkBox = this.createCheckBox(country);
+                selectList.push(checkBox);
+            }
         }
         return selectList;
     }
@@ -131,7 +137,7 @@ class SelectBox extends Component {
         let query = {country: [], province: []};
         let out = [];
         for (let country in currentSelectList) {
-            if (country === 'chart') { continue }
+            if (country === 'input') { continue }
             if (currentSelectList[country].checked === true) {
                 query.country.push(country);
             } else {
@@ -172,7 +178,10 @@ class SelectBox extends Component {
     render() {
         let selectList = this.createSelectTable();
         return(
-            <div className='SelectBox'>{selectList}</div>
+            <div className='SelectBox'>
+                <input type='text' onChange={e => {this.updateList(e)}} className="searchInput" />
+                {selectList}
+            </div>
         )
     }
 
