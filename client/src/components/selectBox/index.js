@@ -21,7 +21,7 @@ class SelectBox extends Component {
         let selectList = [];
         for (let country in this.state) {
             if (country === 'input' || country === 'min') { continue }
-            if (this.state.input !== '' && !(country.startsWith(this.state.input))) { continue }
+            if (this.state.input !== '' && !(country.toLowerCase().startsWith(this.state.input.toLowerCase()))) { continue }
             if ('provinces' in this.state[country]) {
                 selectList.push(this.createAccordion(country))
             } else {
@@ -35,7 +35,7 @@ class SelectBox extends Component {
     createAccordion = country => {
         let provincesList = this.getProvincesDiv(country);
         let countryButton = this.createCountryButton(country);
-        return ( 
+        return (
           <div key={country}>
             {countryButton}
             <div className='provinces'>{provincesList}</div>
@@ -60,21 +60,21 @@ class SelectBox extends Component {
         let labelText = province? province: country;
         let checkValue = province? this.state[country]['provinces'][province] : this.state[country]['checked'];
         return (
-          <Form.Check 
-            key={labelText} 
-            type='checkbox' 
+          <Form.Check
+            key={labelText}
+            type='checkbox'
             onChange={e => {this.handleChange(e)}}
-            country={country} 
-            province={province} 
-            label={labelText} 
+            country={country}
+            province={province}
+            label={labelText}
             checked={checkValue}/>
         )
     }
 
     handleChange = e => {
         let query = this.state;
-        if (e.target.id === 'min_count') {
-            query.min = e.target.value;
+        if (e.target.id === 'min_count' || e.target.id === 'min_count_label') {
+            query.min = e.target.value === ''? 0 : e.target.value;
         } else {
             let country = e.target.getAttribute('country');
             let province = e.target.getAttribute('province');
@@ -108,18 +108,18 @@ class SelectBox extends Component {
     add2Provinces = (countryObj, province) => {
         let tmpCountry = countryObj;
         tmpCountry.provinces[province] = true;
-        if (this.allProvincesChecked(tmpCountry.provinces)) { 
+        if (this.allProvincesChecked(tmpCountry.provinces)) {
             tmpCountry.checked = true;
-        } 
+        }
         return tmpCountry;
     }
-    
+
     allProvincesChecked = provinceList => {
         for (let checked of Object.values(provinceList)) {
             if (checked === false) { return false }
         }
         return true;
-    }    
+    }
 
     removeFrmProvinces = (countryObj, province) => {
         let tmpCountry = countryObj;
@@ -134,7 +134,7 @@ class SelectBox extends Component {
         if ('provinces' in tmpCountry) {
             tmpCountry.provinces = this.setAllProvinces(tmpCountry.provinces, value)
         }
-        return tmpCountry;       
+        return tmpCountry;
     }
 
     getQuery = currentSelectList => {
@@ -168,23 +168,34 @@ class SelectBox extends Component {
         return (
             <div className='country-btn'>
                 {checkBox}
-                <button type='button' onClick={() => {this.toggleProvinces(country)}}><i className="fas fa-angle-down"></i></button>
+                <button type='button' onClick={() => {this.toggleProvinces(country)}}><i className="fas fa-lg fa-angle-down"></i></button>
             </div>
             )
         }
-    
+
     toggleProvinces = country => {
         let tmpCountry = this.state[country];
         tmpCountry['flag'] = !(this.state[country]['flag']);
 
         this.setState({[country]: tmpCountry});
-    }   
+    }
 
     getRangeSelect = () => {
         return (
             <Form.Group className="minRangeSelector">
                 <Form.Label>SELECT MIN CASES:</Form.Label>
-                <Form.Control  type="range" id="min_count" min='0' max='2000' value={this.state.min} onChange={e => {this.handleChange(e)}} />
+                <div className="minRangeInput">
+                    <Form.Control
+                        type="range" id="min_count"
+                        min='0' max='2000'
+                        value={this.state.min}
+                        onChange={e => {this.handleChange(e)}} />
+                    <Form.Control
+                        type="text" id="min_count_label"
+                        placeholder="min cases"
+                        value={this.state.min === 0? '': this.state.min}
+                        onChange={e => {this.handleChange(e)}} />
+                </div>
             </Form.Group>
         )
     }
@@ -195,8 +206,11 @@ class SelectBox extends Component {
         return(
             <div className='SelectBox'>
                 {rangeSelect}
-                <input type='text' onChange={e => {this.updateList(e)}} className="searchInput" />
-                <div className="CountriesList">{selectList}</div>
+                <div className='CountriesSelector'>
+                    <Form.Label>SELECT COUNTRIES:</Form.Label>
+                    <input type='text' onChange={e => {this.updateList(e)}} className="searchInput" placeholder="Search for a country"/>
+                    <div className="CountriesList">{selectList}</div>
+                </div>
             </div>
         )
     }

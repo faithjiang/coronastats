@@ -19,6 +19,9 @@
   border-radius: 5px;
   border: 1px solid #CCD7DD;
 
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   width: 17%;
   min-width: 40px;
   min-height: 280px;
@@ -56,14 +59,13 @@
 }
 
 .searchInput {
-  width: calc(100% - 2px);
-  height: 32px;
+  width: calc(100% - 12px);
 
   margin-bottom: 10px;
   border-radius: 5px;
   border: 0px transparent;
-
-  font-size: 1.2em;
+  padding: 10px 5px;
+  font-size: 1em;
 }
 
 .form-check {
@@ -74,12 +76,16 @@
   font-family: 'Roboto';
 }
 
-.form-check label {
-  padding-left: 5px;
+.form-label {
+  padding-bottom: 10px;
+}
+
+.form-check-label {
+  padding-left: 10px;
 }
 
 input[type="checkbox"] {
-  transform: scale(1.2);
+  transform: scale(1.4);
 }
 
 .minRangeSelector {
@@ -90,8 +96,72 @@ input[type="checkbox"] {
   padding-bottom: 20px;
 }
 
+.minRangeInput {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.minRangeInput input[type="range"] {
+  width: 75%;
+  -webkit-appearance: none;
+}
+
+.minRangeInput input[type="range"]:focus {
+  outline: none;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+  background: tomato;
+  height: 5px;
+ }
+ 
+ input[type="range"]::-moz-range-track {
+  background: tomato;
+  height: 5px;
+ }
+
+ input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 15px;
+  width: 15px;
+  background: #fff;
+  margin-top: -5px;
+  border-radius: 50%;
+ }
+ 
+ input[type="range"]::-moz-range-thumb {
+  height: 15px;
+  width: 15px;
+  background: pink;
+  margin-top: -5px;
+  border-radius: 50%;
+}
+
+.minRangeInput input[type="text"] {
+  width: 20%;
+  padding-left: 5px;
+  border-radius: 2px;
+  border: 0px transparent;
+
+  height: 25px;
+  font-size: 0.5em;
+  background-color: #fff;
+}
+
+.CountriesSelector {
+  padding: 10px 0px;
+  height: 90%;
+  height: calc(100%- 100px);
+
+  display: flex;
+  flex-direction: column;
+}
+
 .CountriesList {
-  min-height: 280px;
-  height: calc(100% - 120px);
+  height: 90%;
+  height: calc(100% - 100px);
   overflow-y: scroll;
 }
+
